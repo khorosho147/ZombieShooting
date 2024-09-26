@@ -46,7 +46,7 @@ public class Player_Controller : MonoBehaviour
         weapons[currentWeaponIndex].OnEnterPlayerState(newState);
     }
 
-    private void Awake()
+    private void Start()
     {
         Instance = this;
         //初始化所有的武器

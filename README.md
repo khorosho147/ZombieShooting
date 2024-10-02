@@ -1,6 +1,3 @@
-# Let's output the formatted content into a markdown file suitable for GitHub.
-
-content = """
 # ゲームタイトル / Game Title / 游戏名称
 
 **ZombieShooting**

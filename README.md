@@ -65,9 +65,3 @@
 **中文：**  
 - 僵尸通常缓慢移动，但当玩家靠近时，它们会加速并利用 Unity 的导航系统追踪玩家。游戏通过对象池生成僵尸，提高了游戏性能和效率。玩家需要在三种武器之间进行切换，抵御僵尸的进攻以求生存。
 """
-
-# Saving the content as a markdown file
-with open("/mnt/data/ZombieShooting_README.md", "w") as file:
-    file.write(content)
-
-"/mnt/data/ZombieShooting_README.md"

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 手枪控制脚本
+/// Pistol control script
 /// </summary>
 public class Pistol : WeaponBase
 {
@@ -26,26 +26,26 @@ public class Pistol : WeaponBase
         switch (playerState)
         {
             case PlayerState.Move:
-                //有可能要切换子弹
-                //第一种情况：子弹打完了,但是要有备用子弹
+                //Might need to switch bullets
+                //First case: Bullets are empty, but standby bullets are available
                 if (curr_BulletNum == 0 && standby_BulletNum > 0)
                 {
                     player.ChangePlayerState(PlayerState.Reload);
                     return;
                 }
 
-                //第二种情况，子弹没有打完，但是玩家按了R键
-                if(standby_BulletNum > 0 && Input.GetKeyDown(KeyCode.R))
+                // Second case: Bullets are not empty, but the player pressed the R key
+                if (standby_BulletNum > 0 && Input.GetKeyDown(KeyCode.R))
                 {
                     player.ChangePlayerState(PlayerState.Reload);
                     return;
                 }
 
 
-                //有可能要射击
-                //当前没有在换子弹中
-                //当前弹匣里面有子弹
-                //按鼠标左键
+                // Might need to shoot
+                // Currently not in reloading
+                // There are bullets in the magazine
+                // Left mouse button pressed
                 if (canShoot && curr_BulletNum > 0 &&Input.GetMouseButton(0))
                 {
                     player.ChangePlayerState(PlayerState.Shoot);

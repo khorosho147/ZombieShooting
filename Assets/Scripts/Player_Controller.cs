@@ -7,7 +7,7 @@ using System;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 玩家状态
+/// Player status
 /// </summary>
 public enum PlayerState
 {
@@ -22,51 +22,51 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] FirstPersonController firstPersonController;
 
 
-    //十字准星
+    // Crosshair
     [SerializeField] Image crossImage;
 
     [SerializeField] Camera[] cameras;
 
-    #region 武器相关
+    #region Weapon related
     [SerializeField] WeaponBase[] weapons;
-    private int currentWeaponIndex = -1;        //当前武器
-    private int previousWeaponIndex = -1;       //上一个武器
-    private bool canChangeWeapon = true;        //能否切换武器
+    private int currentWeaponIndex = -1;        // Current weapon
+    private int previousWeaponIndex = -1;       // Previous weapon
+    private bool canChangeWeapon = true;        // Can change weapon
     #endregion
 
     private int hp = 100;
 
     public PlayerState PlayerState;
 
-    //修改玩家状态
+    //Modify player status
     public void ChangePlayerState(PlayerState newState)
     {
         PlayerState = newState;
-        //也许武器再进入某个状态时候，也需要做一些事情
+        // Perhaps some actions need to be taken when the weapon enters a certain state
         weapons[currentWeaponIndex].OnEnterPlayerState(newState);
     }
 
     private void Start()
     {
         Instance = this;
-        //初始化所有的武器
-        for(int i = 0; i< weapons.Length; i++)
+        // Initialize all weapons
+        for (int i = 0; i< weapons.Length; i++)
         {
             weapons[i].Init(this);
 
         }
         PlayerState = PlayerState.Move;
 
-        //默认选择第一把武器
+        // Default to selecting the first weapon
         ChangeWeapon(0);
     }
 
     private void Update()
     {
-        //驱动武器层
+        // Drive weapon layer
         weapons[currentWeaponIndex].OnUpdatePlayerState(PlayerState);
 
-        //按键检测切换武器
+        // Detect key input to switch weapons
         if (canChangeWeapon == false) return;
         if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeWeapon(0);
         else if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeWeapon(1);
@@ -78,38 +78,38 @@ public class Player_Controller : MonoBehaviour
     }
 
 
-    #region 后坐力
+    #region Recoil
 
     /// <summary>
-    /// 开启射击后坐力
+    /// Activate shooting recoil
     /// </summary>
     /// <param name="recoil"></param>
     public void StartShootRecoil(float recoil = 1)
     {
-        //瞄准器放大缩小
+        //Adjust sight magnification
         StartCoroutine(Shootrecoil_Cross(recoil));
         if(shootRecoil_CameraCoroutine != null) StopCoroutine(shootRecoil_CameraCoroutine);
-        //视角移动
+        //Camera movement
         shootRecoil_CameraCoroutine = StartCoroutine(ShootRecoil_Camera(recoil));
     }
 
-    //后坐力-瞄准器
+    //Recoil - Scope
     IEnumerator Shootrecoil_Cross(float recoil )
     {
         Vector2 scale = crossImage.transform.localScale;
-        //放大
-        while(scale.x < 1.3f)
+        //Zoom in
+        while (scale.x < 1.3f)
         {
-            //停帧
+            //Freeze frame
             yield return null;
             scale.x += Time.deltaTime * 3 * recoil;
             scale.y += Time.deltaTime * 3 * recoil;
             crossImage.transform.localScale = scale;
         }
-        //缩小
+        //Zoom out
         while (scale.x > 1)
         {
-            //停帧
+            //Freeze frame
             yield return null;
             scale.x -= Time.deltaTime * 3 * recoil;
             scale.y -= Time.deltaTime * 3 * recoil;
@@ -128,7 +128,7 @@ public class Player_Controller : MonoBehaviour
         firstPersonController.xRotOffset = xOffset;
         firstPersonController.yRotOffset = yOffset;
 
-        //让偏移发生6帧
+        //Apply the offset over 6 frames
         for (int i = 0; i < 6; i++)
         {
             yield return null;
@@ -154,28 +154,28 @@ public class Player_Controller : MonoBehaviour
 
 
     /// <summary>
-    /// 切换武器
+    /// Switch weapon
     /// </summary>
     private void ChangeWeapon(int newIndex)
     {
-        //是不是重复在按同一个键
+        // Check if the same key is being pressed repeatedly
         if (currentWeaponIndex == newIndex) return;
-        //上一个武器的索引 = 当前武器
+        // Previous weapon index = current weapon
         previousWeaponIndex = currentWeaponIndex;
-        //记录新的武器索引
+        // Record the new weapon index
         currentWeaponIndex = newIndex;
 
-        //如果是第一次使用
+        // If it's the first time using a weapon
         if (previousWeaponIndex < 0)
         {
-            //直接进入当前武器
+            // Directly enter the current weapon
             weapons[currentWeaponIndex].Enter();
         }
-        //现在手里有一个武器，所以要先退出这把武器的，才能播放新武器的动画
+        // If there is already a weapon in hand, we need to exit the current one first before playing the animation for the new weapon
         else
         {
-            //退出这把武器
-            //要等待上一把武器的退出完成后，才能播放新武器的动画
+            //Exit the current weapon
+            //Wait for the previous weapon to finish exiting before playing the animation for the new weapon
             weapons[previousWeaponIndex].Exit(OnWeaponExitOver);
             canChangeWeapon = false;
         }
@@ -189,7 +189,7 @@ public class Player_Controller : MonoBehaviour
 
 
     /// <summary>
-    /// 为武器做外部的初始化
+    /// Perform external initialization for the weapon
     /// </summary>
     public void InitForEnterWeapon(bool wantCrosshair,bool wantBullet)
     {

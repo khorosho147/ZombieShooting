@@ -24,14 +24,14 @@ public class ZombieController : MonoBehaviour
     public Zombie_Weapon weapon;
 
     private int hp = 100;
-    public AudioClip[] FootstepAudioClips;  // 行走的音效
-    public AudioClip[] IdelAudioClips;      // 待机的音效
-    public AudioClip[] HurtAudioClips;      // 受伤的音效
-    public AudioClip[] AttackAudioClips;    // 攻击的音效
+    public AudioClip[] FootstepAudioClips;  // Footstep sound effects
+    public AudioClip[] IdleAudioClips;      // Idle sound effects
+    public AudioClip[] HurtAudioClips;      // Hurt sound effects
+    public AudioClip[] AttackAudioClips;    // Attack sound effects
 
     private Vector3 target;
 
-    // 状态切换时的逻辑
+    // Logic during state transitions
     public ZombieState ZombieState
     {
         get => zombieState;
@@ -57,7 +57,7 @@ public class ZombieController : MonoBehaviour
                     animator.SetBool("Run", false);
                     navMeshAgent.enabled = true;
                     navMeshAgent.speed = 0.3f;
-                    // 去一个目标点
+                    // Move to a target point
                     target = GameManager.Instance.GetPoints();
                     navMeshAgent.SetDestination(target);
                     break;
@@ -100,7 +100,7 @@ public class ZombieController : MonoBehaviour
         ZombieState = ZombieState.Idle;
     }
 
-    // 处理脏数据
+    // Handle dirty data
     public void Init()
     {
         animator.SetTrigger("Init");
@@ -127,7 +127,7 @@ public class ZombieController : MonoBehaviour
             case ZombieState.Walk:
                 if (Vector3.Distance(transform.position, Player_Controller.Instance.transform.position) < dis)
                 {
-                    // 去追玩家
+                    // Chase the player
                     ZombieState = ZombieState.Run;
                     return;
                 }
@@ -138,7 +138,7 @@ public class ZombieController : MonoBehaviour
 
                 break;
             case ZombieState.Run:
-                // 一直追玩家
+                // Keep following the player
                 navMeshAgent.SetDestination(Player_Controller.Instance.transform.position);
                 if (Vector3.Distance(transform.position, Player_Controller.Instance.transform.position) < 2.5f)
                 {
@@ -177,7 +177,7 @@ public class ZombieController : MonoBehaviour
         }
         else
         {
-            // 击退
+            // Knockback
             StartCoroutine(MovePuase());
         }
     }
@@ -200,17 +200,17 @@ public class ZombieController : MonoBehaviour
     }
 
 
-    #region 动画事件
+    #region Animation event
     void IdelAudio()
     {
         if (Random.Range(0, 4) == 1)
         {
-            audioSource.PlayOneShot(IdelAudioClips[Random.Range(0, IdelAudioClips.Length)]);
+            audioSource.PlayOneShot(IdleAudioClips[Random.Range(0, IdleAudioClips.Length)]);
         }
     }
     void FootStep()
     {
-        audioSource.PlayOneShot(FootstepAudioClips[Random.Range(0, IdelAudioClips.Length)]);
+        audioSource.PlayOneShot(FootstepAudioClips[Random.Range(0, IdleAudioClips.Length)]);
     }
     private void HurtAudio()
     {

@@ -7,9 +7,9 @@ public class ZombieManager : MonoBehaviour
     public static ZombieManager Instance;
     public GameObject prefab_Zombie;
 
-    public List<ZombieController> zombies;//当前场景中的僵尸
+    public List<ZombieController> zombies;//Zombies in the current scene
 
-    private Queue<ZombieController> zombiePool = new Queue<ZombieController>();//备用僵尸
+    private Queue<ZombieController> zombiePool = new Queue<ZombieController>();//Backup zombies
     public Transform Pool;
     private void Awake()
     {
@@ -20,16 +20,16 @@ public class ZombieManager : MonoBehaviour
         StartCoroutine(CheckZombie());
     }
 
-    // 检查僵尸
+    // Check zombies
     IEnumerator CheckZombie()
     {
         while (true)
         {
             yield return new WaitForSeconds(1);
-            // 僵尸数量不够，产生僵尸
+            // Not enough zombies, spawn more zombies
             if (zombies.Count<20)
             {
-                // 池子里面有，从池子拿
+                // If available in pool，take from the pool
                 if (zombiePool.Count>0)
                 {
                     ZombieController zb = zombiePool.Dequeue();
@@ -40,7 +40,7 @@ public class ZombieManager : MonoBehaviour
                     zb.Init();
                     yield return new WaitForSeconds(2);
                 }
-                // 池子没有，就实例化
+                // Not in pool, instantiate
                 else
                 {
                     GameObject zb = Instantiate(prefab_Zombie, GameManager.Instance.GetPoints(), Quaternion.identity, transform);

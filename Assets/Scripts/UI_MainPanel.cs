@@ -55,7 +55,7 @@ public class UI_MainPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// 进入武器的初始化
+    /// Enter weapon initialization
     /// </summary>
 
     public void InitForEnterWeapon( bool wantBullet)

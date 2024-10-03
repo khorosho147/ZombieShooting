@@ -27,11 +27,11 @@ public class Knife_Collider : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if(!canAttack) return;
-        //没打过这个敌人
-        if(!targetList.Contains(other.gameObject))
+        //Hasn't hit this enemy
+        if (!targetList.Contains(other.gameObject))
         {
             targetList.Add(other.gameObject);
-            //ClosestPoint两个碰撞体的交界点，括号里是武器自身
+            //ClosestPoint: intersection point of two colliders, with the weapon itself in parentheses
             knife.HitTarget(other.gameObject, other.ClosestPoint(transform.position));
         }
     }

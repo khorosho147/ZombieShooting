@@ -8,7 +8,7 @@ public class Sniper : WeaponBase
     [SerializeField] GameObject sightCanvas;
     [SerializeField] GameObject[] renders;
 
-    //瞄准状态
+    //Aiming state
     private bool isAim = false;
 
 
@@ -44,15 +44,15 @@ public class Sniper : WeaponBase
         switch (playerState)
         {
             case PlayerState.Move:
-                //有可能要切换子弹
-                //第一种情况：子弹打完了,但是要有备用子弹
+                //Might need to switch bullets
+                //First case: Bullets are empty, but standby bullets are available
                 if (curr_BulletNum == 0 && standby_BulletNum > 0)
                 {
                     player.ChangePlayerState(PlayerState.Reload);
                     return;
                 }
 
-                //第二种情况，子弹没有打完，但是玩家按了R键
+                // Second case: Bullets are not empty, but the player pressed the R key
                 if (standby_BulletNum > 0 && Input.GetKeyDown(KeyCode.R))
                 {
                     player.ChangePlayerState(PlayerState.Reload);
@@ -60,18 +60,17 @@ public class Sniper : WeaponBase
                 }
 
 
-                //有可能要射击
-                //当前没有在换子弹中
-                //当前弹匣里面有子弹
-                //按鼠标左键
+                // Might need to shoot
+                // Currently not in reloading
+                // There are bullets in the magazine
+                // Left mouse button pressed
                 if (canShoot && curr_BulletNum > 0 && Input.GetMouseButton(0))
                 {
                     player.ChangePlayerState(PlayerState.Shoot);
                 }
 
-                //开镜
-                //开镜/关镜
-                if(canShoot && Input.GetMouseButtonDown(1))
+                //Zoom in / Zoom out
+                if (canShoot && Input.GetMouseButtonDown(1))
                 {
                     isAim = !isAim;
                     if (isAim) StartAim();
@@ -86,32 +85,32 @@ public class Sniper : WeaponBase
 
     private void StartAim()
     {
-        //播放动画
+        //Play animation
         animator.SetBool("Aim", true);
-        //关闭火花效果
+        //Disable muzzle flash effect
         wantShootEF = false;
     }
 
 
     private void StopAim()
     {
-        //停止播放动画
+        //Stop playing animation
         animator.SetBool("Aim", false);
-        //开启火花效果
+        //Enable muzzle flash effect
         wantShootEF = true;
-        //打开所有的渲染器
+        // Enable all renderers
         for (int i = 0; i < renders.Length; i++)
         {
             renders[i].SetActive(true);
         }
 
-        //关闭狙击镜
+        //Disable scope
         sightCanvas.SetActive(false);
-        //还原镜头缩放
+        //Restore camera view
         player.SetCameraView(60);
     }
 
-    #region 动画事件
+    #region Animation event
     private void StartLoad()
     {
         PlayAudio(3);
@@ -124,16 +123,16 @@ public class Sniper : WeaponBase
 
     IEnumerator DoAim()
     {
-        //隐藏所有的渲染器
-        for(int i = 0; i < renders.Length; i++)
+        //Hide all renderers
+        for (int i = 0; i < renders.Length; i++)
         {
             renders[i].SetActive(false);
         }
-        //停留一点时间
+        //Stay for a moment
         yield return new WaitForSeconds(0.1f);
-        //显示狙击镜
+        //Show scope
         sightCanvas.SetActive(true);
-        //设置镜头缩放
+        //Set camera view
         player.SetCameraView(30);
     }
 

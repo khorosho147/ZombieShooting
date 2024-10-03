@@ -7,7 +7,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// 所有的玩家的武器基类
+/// Base class for all player weapons
 /// </summary>
 public abstract class WeaponBase : MonoBehaviour
 {
@@ -16,39 +16,39 @@ public abstract class WeaponBase : MonoBehaviour
     protected Player_Controller player;
 
 
-    #region 弹匣相关数据
-    protected int curr_BulletNum;      //当前子弹数量
-    public int curr_MaxBulletNum;   //当前子弹上限
-    protected int standby_BulletNum;   //备用子弹数量
-    public int standby_MaxBulletNum;//备用子弹上限
+    #region Magazine data
+    protected int curr_BulletNum;      // Current bullet count
+    public int curr_MaxBulletNum;      // Current max bullet count
+    protected int standby_BulletNum;   // Standby bullet count
+    public int standby_MaxBulletNum;   // Standby max bullet count
     #endregion
 
 
-    #region 射击参数
-    public int attackValue;         //攻击力
-    public bool wantCrosshair;      //是否有准星
-    public bool wantBullet;         //是否有子弹
-    public bool wantShootEF;        //是否有射击特效
-    public bool wantRecoil;         //是否需要后坐力
-    public float recoilStrength;    //后坐力强度
-    public bool canThroughWall;     //射击穿墙
+    #region Shooting parameters
+    public int attackValue;         // Attack power
+    public bool wantCrosshair;      // Has crosshair
+    public bool wantBullet;         // Has bullets
+    public bool wantShootEF;        // Has shooting effect
+    public bool wantRecoil;         // Needs recoil
+    public float recoilStrength;    // Recoil strength
+    public bool canThroughWall;     // Can shoot through walls
 
 
     protected bool canShoot = false;
     private bool wantReloadOnEnter = false;
     #endregion
 
-    #region 效果
-    [SerializeField] AudioClip[] audioClips;        //用到的所有音效
-    [SerializeField] protected GameObject[] prefab_BulletEF;  //子弹命中效果
-    [SerializeField] protected GameObject shootEF;            //射击火花
+    #region Effect
+    [SerializeField] AudioClip[] audioClips;        // All used audio clips
+    [SerializeField] protected GameObject[] prefab_BulletEF;  // Bullet impact effects
+    [SerializeField] protected GameObject shootEF;            // Muzzle flash effect
 
     #endregion
 
     public virtual void Init(Player_Controller player)
     {
         this.player = player;
-        //初始化子弹
+        // Initialize bullets
         curr_BulletNum = curr_MaxBulletNum;
         standby_BulletNum = standby_MaxBulletNum;
 
@@ -59,16 +59,16 @@ public abstract class WeaponBase : MonoBehaviour
     public abstract void OnUpdatePlayerState(PlayerState playerState);
 
     /// <summary>
-    /// 玩家切换到当前武器
+    /// Player switches to the current weapon
     /// </summary>
     public virtual void Enter()
     {
         canShoot = false;
 
-        //初始化武器，是否需要子弹，UI准星等
+        //Initialize weapon, check if bullets, UI crosshair, etc. are needed
         player.InitForEnterWeapon(wantCrosshair, wantBullet);
-        //更新子弹数量
-        if(wantBullet)
+        //Update bullet count
+        if (wantBullet)
         {
             player.UpdateBulletUI(curr_BulletNum, curr_MaxBulletNum, standby_BulletNum);
             if (curr_BulletNum > 0)
@@ -77,13 +77,13 @@ public abstract class WeaponBase : MonoBehaviour
             }
             else 
             {
-                //进入的时候就要更换子弹
+                //Reload bullets upon entering
                 wantReloadOnEnter = true;
             }
         }
 
-        //重置一些状况
-        if(shootEF!=null) shootEF.SetActive(false);
+        //Reset some conditions
+        if (shootEF!=null) shootEF.SetActive(false);
 
 
         gameObject.SetActive(true);
@@ -91,7 +91,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     private Action onExitOver;
     /// <summary>
-    /// 退出这把武器
+    /// Exit the current weapon
     /// </summary>
     public virtual void Exit(Action onExitOver)
     {
@@ -102,26 +102,26 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected virtual void OnLeftAttack()
     {
-        //更新子弹
-        if(wantBullet)
+        //Update bullets
+        if (wantBullet)
         {
             curr_BulletNum--;
             player.UpdateBulletUI(curr_BulletNum, curr_MaxBulletNum, standby_BulletNum);
         }
         canShoot = false;
-        //播放射击动画
+        //Play shooting animation
         animator.SetTrigger("Shoot");
-        //火花
+        //Muzzle flash
         if (wantShootEF) shootEF.SetActive(true);
-        //后坐力
-        if(wantRecoil) player.StartShootRecoil(recoilStrength);
+        //Recoil
+        if (wantRecoil) player.StartShootRecoil(recoilStrength);
 
-        //音效
+        //Sound effects
         PlayAudio(1);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
-        //穿墙
+        //Wall penetration
         if (canThroughWall)
         {
             RaycastHit[] raycastHits = Physics.RaycastAll(ray,1500f);
@@ -132,7 +132,7 @@ public abstract class WeaponBase : MonoBehaviour
         }
         else
         {
-            //伤害判定
+            //Damage detection
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 1500f))
             {
                 HitGameObject(hitInfo);
@@ -146,16 +146,16 @@ public abstract class WeaponBase : MonoBehaviour
 
     private void HitGameObject(RaycastHit hitInfo)
     {
-        //判定是不是攻击到了僵尸
+        //Check if the zombie was hit
         if (hitInfo.collider.gameObject.CompareTag("Zombie"))
         {
-            //命中效果
+            //Hit effect
             GameObject go = Instantiate(prefab_BulletEF[1], hitInfo.point, Quaternion.identity);
             go.transform.LookAt(Camera.main.transform);
-            //僵尸的逻辑
+            //Zombie logic
             ZombieController zombie = hitInfo.collider.gameObject.GetComponent<ZombieController>();
-            //如果打到没有脚本的身体部位，从父物体身上找
-            if(zombie == null) zombie = hitInfo.collider.gameObject.GetComponentInParent<ZombieController>();
+            //If a non-scripted body part is hit, find the parent object
+            if (zombie == null) zombie = hitInfo.collider.gameObject.GetComponentInParent<ZombieController>();
             zombie.Hurt(attackValue);
         }
         else if(hitInfo.collider.gameObject !=player.gameObject)
@@ -174,7 +174,7 @@ public abstract class WeaponBase : MonoBehaviour
     }
 
 
-    #region 动画事件
+    #region Animation event
     private void EnterOver()
     {
         canShoot = true;
@@ -188,7 +188,7 @@ public abstract class WeaponBase : MonoBehaviour
         gameObject.SetActive(false);
         onExitOver?.Invoke();
         #region
-        //等同于下面
+        //Equivalent to the following
         //if(onExitOver != null)
         //{
         //    onExitOver.Invoke();
@@ -208,7 +208,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     private void ReloadOver()
     {
-        //填充子弹
+        //Refill bullets
         int want = curr_MaxBulletNum - curr_BulletNum;
         if (standby_BulletNum - want < 0) 
         {
@@ -216,7 +216,7 @@ public abstract class WeaponBase : MonoBehaviour
         }
         standby_BulletNum -= want;
         curr_BulletNum += want;
-        //更新UI
+        //Update UI
         player.UpdateBulletUI(curr_BulletNum, curr_MaxBulletNum, standby_BulletNum);
         animator.SetBool("Reload", false);
         player.ChangePlayerState(PlayerState.Move);

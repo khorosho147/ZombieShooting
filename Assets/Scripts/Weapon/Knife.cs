@@ -41,15 +41,15 @@ public class Knife : WeaponBase
         switch (playerState)
         {
             case PlayerState.Move:
-                //左键攻击
-                if(canShoot && Input.GetMouseButton(0))
+                //Left click attack
+                if (canShoot && Input.GetMouseButton(0))
                 {
                     isLeftAttack = true;
                     player.ChangePlayerState(PlayerState.Shoot);
                     return;
                 }
 
-                //右键攻击
+                // Right click attack
                 if (canShoot && Input.GetMouseButton(1))
                 {
                     isLeftAttack = false;
@@ -65,15 +65,15 @@ public class Knife : WeaponBase
     public void HitTarget(GameObject hitObj,Vector3 efPos)
     {
         PlayAudio(2);
-        //判定是不是攻击到了僵尸
+        //Check if the zombie was hit
         if (hitObj.CompareTag("Zombie"))
         {
-            //命中效果
+            //Hit effect
             GameObject go = Instantiate(prefab_BulletEF[1], efPos, Quaternion.identity);
             go.transform.LookAt(Camera.main.transform);
-            //僵尸的逻辑
+            //Zombie logic
             ZombieController zombie = hitObj.GetComponent<ZombieController>();
-            //如果打到没有脚本的身体部位，从父物体身上找
+            //If a non-scripted body part is hit, find the parent object
             if (zombie == null) zombie = hitObj.GetComponentInParent<ZombieController>();
             zombie.Hurt(attackValue);
         }

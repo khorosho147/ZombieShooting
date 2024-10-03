@@ -2066,7 +2066,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: df874be086de9441a8ef805bd42d0fff, type: 3}
   - {fileID: 8300000, guid: d47d075cb98ed4b869828da8dfd7ed52, type: 3}
   - {fileID: 8300000, guid: 8af1d3f5222454aaabfae1a13ce78592, type: 3}
-  IdelAudioClips:
+  IdleAudioClips:
   - {fileID: 8300000, guid: 90d342cf6f89440b9aa6c6ef4af6af88, type: 3}
   - {fileID: 8300000, guid: 8c8b4012f639545b2a1f70a2082307b3, type: 3}
   - {fileID: 8300000, guid: ad7b6eb3c723442b483e6b280fa02230, type: 3}

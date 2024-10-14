@@ -57,7 +57,7 @@
 ## ゲームの特徴 / Gameplay Mechanics / 游戏机制
 
 **日本語：**  
-- ゾンビは通常、ゆっくりと移動しますが、プレイヤーが近づくと急加速し、Unity のナビゲーション機能を使ってプレイヤーを追尾します。ゾンビの生成にはオブジェクトプールが使用されており、ゲームのパフォーマンスを向上させています。プレイヤーは状況に応じて 3 種類の武器を切り替えながら、生き延びるためにゾンビを撃退する必要があります。
+- ゾンビは通常、ゆっくりと移動しますが、プレイヤーが近づくと急加速し、Unity のナビゲーション機能を使ってプレイヤーを追跡します。ゾンビの生成にはオブジェクトプールが使用されており、ゲームのパフォーマンスを向上させています。プレイヤーは状況に応じて 3 種類の武器を切り替えながら、生き延びるためにゾンビを撃退する必要があります。
 
 **English:**  
 - Zombies normally move slowly, but when the player gets close, they will accelerate and track the player using Unity's navigation system. The game uses object pooling for zombie generation, improving performance and efficiency. The player must switch between the three available weapons to survive the onslaught of zombies.

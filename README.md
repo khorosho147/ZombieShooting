@@ -7,7 +7,7 @@
 ## ゲーム概要 / Game Overview / 游戏简介
 
 **日本語：**  
-**ZombieShooting** は、時間の都合で開始画面や終了画面の UI が未実装です。ゲームの終了は `Alt + F4` で行ってください。本ゲームの開発は、主にゲームプレイの中核機能に焦点を当てており、プレイヤーは3種類の武器を使い分けて、襲い来るゾンビを倒します。ゾンビは通常はゆっくり移動しますが、プレイヤーが近づくと急に加速し、Unity のナビゲーション機能を使ってプレイヤーを追尾します。また、ゾンビの生成はオブジェクトプールを活用して、パフォーマンスを最適化しています。
+**ZombieShooting** は、開発時間の都合上、スタート画面や終了画面の UI は未実装です。ゲームを終了する際は `Alt + F4` を使用してください。本作は、主にゲームプレイの中核機能にフォーカスして開発されており、プレイヤーは3種類の武器を使い分けて、襲い来るゾンビを倒します。ゾンビは普段はゆっくり移動しますが、プレイヤーが近づくと突然加速し、Unity のナビゲーション機能を使ってプレイヤーを追跡します。また、ゾンビの生成はオブジェクトプールを活用して、パフォーマンスを最適化しています。
 
 **English:**  
 **ZombieShooting** does not include start or end UI screens due to time constraints. To close the game, use `Alt + F4`. The development focused primarily on core gameplay mechanics. The player can switch between 3 different weapons to fend off waves of zombies. Zombies normally move slowly but will accelerate and track the player when they get close, utilizing Unity's navigation system. The game also employs object pooling to optimize performance and ensure smoother gameplay.
@@ -57,7 +57,7 @@
 ## ゲームの特徴 / Gameplay Mechanics / 游戏机制
 
 **日本語：**  
-- ゾンビは通常、ゆっくりと移動しますが、プレイヤーが近づくと急加速し、Unity のナビゲーション機能を使ってプレイヤーを追跡します。ゾンビの生成にはオブジェクトプールが使用されており、ゲームのパフォーマンスを向上させています。プレイヤーは状況に応じて 3 種類の武器を切り替えながら、生き延びるためにゾンビを撃退する必要があります。
+- ゾンビは普段、ゆっくりと移動しますが、プレイヤーが近づくと急加速し、Unity のナビゲーション機能を使ってプレイヤーを追跡します。ゾンビの生成にはオブジェクトプールが使用されており、ゲームのパフォーマンスを向上させています。プレイヤーは状況に応じて 3 種類の武器を切り替えながら、生き延びるためにゾンビを撃退する必要があります。
 
 **English:**  
 - Zombies normally move slowly, but when the player gets close, they will accelerate and track the player using Unity's navigation system. The game uses object pooling for zombie generation, improving performance and efficiency. The player must switch between the three available weapons to survive the onslaught of zombies.
